@@ -1,0 +1,22 @@
+{
+  "name": "businesssystem",
+  "version": "1.0.0",
+  "description": "This will be the new business system, made with node, read the README",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dr4kk0nnys/BusinessSystem.git"
+  },
+  "author": "Dr4kk0nnys",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dr4kk0nnys/BusinessSystem/issues"
+  },
+  "homepage": "https://github.com/Dr4kk0nnys/BusinessSystem#readme",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
+}
