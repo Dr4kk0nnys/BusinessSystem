@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Dr4kk0nnys/BusinessSystem#readme",
   "dependencies": {
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "prompt-sync": "^4.2.0"
   }
 }

@@ -11,3 +11,18 @@ exports.GetLocalTime = () => {
 
     return `${day}/${month}/${year}    ${hours}:${minutes}:${seconds}`
 }
+
+exports.ShowOptions = () => {
+
+    // Client options ...
+    console.log('[ 1 ] - Add client \n' +
+        '[ 2 ] - Remove client \n' + 
+        '[ 3 ] - Update client \n' +
+        '\n' +
+        // Order options ...
+        '[ 4 ] - Add order \n' +
+        '[ 5 ] - Remove order \n' +
+        '[ 6 ] - Update order \n' +
+        '\n' +
+        '[ 7 ] - Leave \n')
+}
