@@ -1,3 +1,6 @@
+// TODO: make a config.txt, each line is a key component, it will read each line at the start of the program, the first line will be like: 'Tech company' or 'Bread shop'
+
+
 const prompt = require('prompt-sync')()
 
 const utils = require('./modules/utils.js')
@@ -46,12 +49,20 @@ class System {
         switch (optionID) {
             case '1':
 
-                // Full name ...
+                // Full name, CPF, street info, desktop or notebook, accessories ...
 
-                console.log('Add client ...')
+                console.log('Add client ... \n')
 
                 const name = prompt('Name ? ')
-                const age = prompt('Age ? ')
+                const cpf = prompt('CPF ? ')
+                const streetName = prompt('Street name ? ')
+                const houseNumber = prompt('Number of your house ? ')
+                const desktopOrNotebook = prompt('Is it a desktop or a notebook ? ')
+                const accessories = prompt('Which accessories does it has ? ')
+
+                console.log(name, cpf, streetName, houseNumber, desktopOrNotebook, accessories)
+
+                // Saves all the data
         }
     }
 }
