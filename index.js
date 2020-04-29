@@ -1,7 +1,9 @@
 // TODO: make a config.txt, each line is a key component, it will read each line at the start of the program, the first line will be like: 'Tech company' or 'Bread shop'
 
 
-const prompt = require('prompt-sync')()
+const prompt = require('prompt-sync')({
+    sigint: true
+})
 
 const utils = require('./modules/utils')
 const Database = require('./modules/database')
@@ -29,7 +31,7 @@ class System {
     GetUserInput() {
         let optionID = prompt('> ')
 
-        while (/^\d+$/.test(optionID) == false) {
+        while (utils.IsNumber === false) {
             console.log('Invalid input!')
             optionID = prompt('> ')
         }
@@ -41,47 +43,62 @@ class System {
 
         /*
             [ 1 ] - Add client 
-            [ 2 ] - Remove client  
+            [ 2 ] - Remove client
             [ 3 ] - Update client 
 
             [ 4 ] - Add order 
             [ 5 ] - Remove order 
             [ 6 ] - Update order 
+
+            [ 7 ] - Leave
+            [ 8 ] - Read
         */
 
         switch (optionID) {
             case '1':
 
-                // Full name, CPF, street info, desktop or notebook, accessories ...
-                console.log('Add client ... \n')
-
-                const name = prompt('Name ? ')
-                const cpf = prompt('CPF ? ')
-                const streetName = prompt('Street name ? ')
-                const neighborhoodName = prompt('Neighborhood name ? ')
-                const houseNumber = prompt('Number of your house ? ')
-                const computerType = prompt('Is it a desktop or a notebook ? ')
-                const accessories = prompt('Which accessories does it has ? ')
-
-                console.log(name, cpf, streetName, houseNumber, neighborhoodName, computerType, accessories)
-
-                // Passes all the info to a dictionary
-                const values = {
-                    'name': name,
-                    'cpf': cpf,
-                    'streetName': streetName,
-                    'neighborhoodName': neighborhoodName,
-                    'houseNumber': houseNumber,
-                    'computerType': computerType,
-                    'accessories': accessories
-                }
-
-                // connecting to the database for editing/adding/removing purpouses
-                this.database.Connect()
+                // GetUserData returns the info -> Name, cpf, adress ...
+                const clientInfo = this.database.GetUserData()
 
                 // Saves all the data
-                this.database.Add(values)
+                this.database.Add(clientInfo)
 
+                break
+
+            case '2':
+                console.log('Removing client ... \n')
+
+                let clientID = prompt('What is the client id ? ')
+
+                while (utils.IsNumber(clientID) === false) {
+                    console.log('Invalid value!')
+                    clientID = prompt('What is the client id ? ')
+                }
+
+                this.database.Remove(clientID)
+
+            case '3':
+                console.log('Updating client info ... \n')
+
+                let id = prompt('What is the client id you want to update ? ')
+
+                while (utils.IsNumber(id) === false) {
+                    console.log('Invalid value!')
+                    id = prompt('What is the client id you want to update ? ')
+                }
+
+                const newClientInfo = this.database.GetUserData()
+
+                console.log(newClientInfo)
+
+                this.database.Update(Number(id))
+
+                break
+
+            case '8':
+                this.database.Read()
+
+                brek
         }
     }
 }
