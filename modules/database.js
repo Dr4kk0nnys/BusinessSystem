@@ -27,10 +27,11 @@ class Database {
         })
     }
 
-    // values will be a dictionary with multiple key/values
     Add(values) {
         const query = `INSERT INTO ${this.TABLE_NAME} SET ?`
 
+        // values -> a dictionary with multiple key/values
+        // -> name, adress, info, etc ...
         this.db.query(query, values, (err, res) => {
             if (err) throw new Error(err, res)
 
@@ -59,20 +60,12 @@ class Database {
 
     Update(id, values) {
 
-        const query = `SELECT * FROM ${this.TABLE_NAME}`
+        const updateQuery = `UPDATE ${this.TABLE_NAME} SET ? WHERE id = ${id}`
 
-        this.db.query(query, (err, res) => {
-            if (err) throw err
+        this.db.query(updateQuery, values, (err, res) => {
+            if (err) throw (err, res)
 
-            for (let i = 0; i < res.length; i++) {
-
-                // if the query has the id the user want to update
-                if (res[i].id === id) {
-
-                    // update the old version of the query if the new value, and pass it as parameter
-                    const updateQuery = `UPDATE ${this.TABLE_NAME} SET ? where `
-                }
-            }
+            console.log('Successfully updated the database')
         })
     }
 

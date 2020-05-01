@@ -56,17 +56,34 @@ class System {
 
         switch (optionID) {
             case '1':
+                console.log('Adding clinet ... \n')
 
-                // GetUserData returns the info -> Name, cpf, adress ...
+                /*
+                    - GetUserData() takes the user input
+                    - and gets all the necessary info ( it can be null as well )
+                    - It's stored as 'clientInfo' and it's a dictionary with all
+                    - the info condensed
+                    - It then passes this data to the database through the Add function
+                */
                 const clientInfo = this.database.GetUserData()
-
-                // Saves all the data
                 this.database.Add(clientInfo)
 
                 break
 
             case '2':
                 console.log('Removing client ... \n')
+
+                /*
+                    - It first asks for the client id
+                    - and while the client id isn't a number
+                        -> IsNumber is such an useful function
+                        -> that only returns true if it's a number
+                        -> it's also a regex expression
+                    - it keep asking for the right id
+                    - It then removes the id
+
+                    .Note: If there's no such id, it won't remove nor print anything
+                */
 
                 let clientID = prompt('What is the client id ? ')
 
@@ -77,8 +94,17 @@ class System {
 
                 this.database.Remove(clientID)
 
+                break
+
             case '3':
                 console.log('Updating client info ... \n')
+
+                /*
+                    - Update is a combination of remove and add
+                    - it first asks for the client id
+                    - it then ask for the new info
+                    - then update the old data
+                */
 
                 let id = prompt('What is the client id you want to update ? ')
 
@@ -89,16 +115,14 @@ class System {
 
                 const newClientInfo = this.database.GetUserData()
 
-                console.log(newClientInfo)
-
-                this.database.Update(Number(id))
+                this.database.Update(Number(id), newClientInfo)
 
                 break
 
             case '8':
                 this.database.Read()
 
-                brek
+                break
         }
     }
 }
