@@ -9,7 +9,7 @@ exports.GetLocalTime = () => {
     let month = date.getMonth() + 1 // Index 0
     let year = date.getFullYear()
 
-    return `${day}/${month}/${year}    ${hours}:${minutes}:${seconds}`
+    return `${day}/${month}/${year}    ${hours}:${minutes}:${seconds} \n`
 }
 
 exports.ShowOptions = () => {
@@ -24,8 +24,9 @@ exports.ShowOptions = () => {
         '[ 5 ] - Remove order \n' +
         '[ 6 ] - Update order \n' +
         '\n' +
-        '[ 7 ] - Leave \n' +
-        '[ 8 ] - Read \n')
+        '[ 7 ] - Read clients database \n' +
+        '[ 8 ] - Read orders database \n' +
+        '[ 9 ] - Leave \n')
 }
 
 exports.IsNumber = (value) => {

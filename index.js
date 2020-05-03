@@ -42,21 +42,26 @@ class System {
     HandleUserInput(optionID) {
 
         /*
-            [ 1 ] - Add client 
-            [ 2 ] - Remove client
-            [ 3 ] - Update client 
+            Client options ( primary database ) {
+                [ 1 ] - Add client 
+                [ 2 ] - Remove client
+                [ 3 ] - Update client 
+            }
 
-            [ 4 ] - Add order 
-            [ 5 ] - Remove order 
-            [ 6 ] - Update order 
-
-            [ 7 ] - Leave
-            [ 8 ] - Read
+            Order options ( secondary database ) {
+                [ 4 ] - Add order 
+                [ 5 ] - Remove order 
+                [ 6 ] - Update order 
+            }
+            
+            [ 7 ] - Read Client's database
+            [ 8 ] - Read Order's database
+            [ 9 ] - Leave
         */
 
         switch (optionID) {
             case '1':
-                console.log('Adding clinet ... \n')
+                console.log('Adding client ... \n')
 
                 /*
                     - GetUserData() takes the user input
@@ -65,8 +70,8 @@ class System {
                     - the info condensed
                     - It then passes this data to the database through the Add function
                 */
-                const clientInfo = this.database.GetUserData()
-                this.database.Add(clientInfo)
+                const clientInfo = this.database.GetClientInfo()
+                this.database.Add(0, clientInfo)
 
                 break
 
@@ -92,7 +97,7 @@ class System {
                     clientID = prompt('What is the client id ? ')
                 }
 
-                this.database.Remove(clientID)
+                this.database.Remove(0, clientID)
 
                 break
 
@@ -113,16 +118,89 @@ class System {
                     id = prompt('What is the client id you want to update ? ')
                 }
 
-                const newClientInfo = this.database.GetUserData()
+                const newClientInfo = this.database.GetClientInfo()
 
-                this.database.Update(Number(id), newClientInfo)
+                this.database.Update(0, Number(id), newClientInfo)
+
+                break
+
+            // Order options ...
+
+            case '4':
+                console.log('Adding order ... \n')
+
+                const orderInfo = this.database.GetOrderInfo()
+                this.database.Add(1, orderInfo)
+
+                break
+
+            case '5':
+                console.log('Removing order ... \n')
+
+                let orderID = prompt('What is the order id ? ')
+
+                while (utils.IsNumber(orderID) === false) {
+                    console.log('Invalid value!')
+                    orderID = prompt('What is the order id ? ')
+                }
+
+                this.database.Remove(1, orderID)
+
+                break
+
+            case '6':
+                console.log('Updating order ... \n')
+
+                let updateOrderID = prompt('What is the order id you want to update ? ')
+
+                while (utils.IsNumber(updateOrderID) === false) {
+                    console.log('Invalid value!')
+                    orderID = prompt('What is the order id you want to update ? ')
+                }
+
+                const newOrderInfo = this.database.GetOrderInfo()
+
+                this.database.Update(1, Number(updateOrderID), newOrderInfo)
+
+                break
+
+            // Others ...
+
+            case '7':
+                const option = prompt('ID or Name or CPF ? ')
+
+                if (option === 'ID') {
+                    const ID = prompt('Client ID ? ')
+
+                    this.database.ReadByID(0, ID)
+                } else if (option === 'Name') {
+                    const name = prompt('Client name ? ')
+
+                    this.database.ReadByName(name)
+                } else if (option === 'CPF') {
+                    const cpf = prompt('Client CPF ? ')
+
+                    this.database.ReadByCPF(cpf)
+                } else {
+                    console.log('Invalid!')
+                }
 
                 break
 
             case '8':
-                this.database.Read()
+                const choice = prompt('ID or ClientID ? ')
 
-                break
+                if (choice === 'ID') {
+                    const ID = prompt('ID ? ')
+
+                    this.database.ReadByID(1, ID)
+                } else if (choice === 'ClientID') {
+                    const client = prompt('Client ID ? ')
+
+                    this.database.ReadByClientID(client)
+                }
+            case '9':
+                return false
         }
     }
 }

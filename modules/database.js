@@ -8,13 +8,34 @@ class Database {
     constructor() {
 
         this.DATABASE_NAME = 'businessSystem'
-        this.TABLE_NAME = 'clients'
+        this.PRIMARY_TABLE = 'clients'
+        this.SECONDARY_TABLE = 'orders'
 
         this.db = mysql.createConnection({
             host: 'localhost',
             user: 'root',
             password: '',
             database: this.DATABASE_NAME
+        })
+    }
+
+    CreatePrimaryTable() {
+        const query = 'CREATE TABLE clients (id int AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), cpf VARCHAR(255), streetName VARCHAR(255), houseNumber VARCHAR(255), neighborhoodName VARCHAR(255))'
+
+        this.db.query(query, (err, res) => {
+            if (err) throw new Error(err, res)
+
+            console.log('Successfully created the table')
+        })
+    }
+
+    CreateSecondaryTable() {
+        const query = `CREATE TABLE orders (id int AUTO_INCREMENT PRIMARY KEY, clientID VARCHAR(255), computerType VARCHAR(255), computerProblem VARCHAR(255), accessories VARCHAR(255))`
+
+        this.db.query(query, (err, res) => {
+            if (err) throw new Error(err, res)
+
+            console.log('Successfully created the table')
         })
     }
 
@@ -27,8 +48,9 @@ class Database {
         })
     }
 
-    Add(values) {
-        const query = `INSERT INTO ${this.TABLE_NAME} SET ?`
+    Add(table, values) {
+
+        const query = `INSERT INTO ${this.GetTableName(table)} SET ?`
 
         // values -> a dictionary with multiple key/values
         // -> name, adress, info, etc ...
@@ -39,10 +61,11 @@ class Database {
         })
     }
 
+    // __ NOT USEFUL __
     // it will return ALL the query from the database
-    Read() { // -> it may result in lag/performace issues
+    Read(table) { // -> it may result in lag/performace issues
 
-        const query = `SELECT * FROM ${this.TABLE_NAME}`
+        const query = `SELECT * FROM ${this.GetTableName(table)}`
 
         this.db.query(query, (err, res) => {
             if (err) throw err
@@ -58,19 +81,66 @@ class Database {
         })
     }
 
-    Update(id, values) {
+    ReadByID(table, id) {
 
-        const updateQuery = `UPDATE ${this.TABLE_NAME} SET ? WHERE id = ${id}`
+        const query = `SELECT * FROM ${this.GetTableName(table)} WHERE id = ${id}`
+
+        this.db.query(query, (err, res) => {
+            if (err) throw (err, res)
+
+            console.log(res)
+        })
+    }
+
+    // only work on the primary database
+    ReadByName(name) {
+
+        const query = `SELECT * FROM ${this.PRIMARY_TABLE} WHERE name = '${name}'`
+
+        this.db.query(query, (err, res) => {
+            if (err) throw (err, res)
+
+            console.log(res)
+        })
+    }
+
+    // only work on the primary database
+    ReadByCPF(cpf) {
+
+        const query = `SELECT * FROM ${this.PRIMARY_TABLE} WHERE cpf = '${cpf}'`
+
+        this.db.query(query, (err, res) => {
+            if (err) throw (err, res)
+
+            console.log(res)
+        })
+    }
+
+    // only works on the secondary database
+    ReadByClientID(clientID) {
+
+        const query = `SELECT * FROM ${this.SECONDARY_TABLE} WHERE clientID = '${clientID}'`
+
+        this.db.query(query, (err, res) => {
+            if (err) throw (err, res)
+
+            console.log(res)
+        })
+    }
+
+    Update(table, id, values) {
+
+        const updateQuery = `UPDATE ${this.GetTableName(table)} SET ? WHERE id = ${id}`
 
         this.db.query(updateQuery, values, (err, res) => {
             if (err) throw (err, res)
 
-            console.log('Successfully updated the database')
+            console.log('Successfully updated!')
         })
     }
 
-    Remove(id) {
-        const query = `DELETE FROM ${this.TABLE_NAME} WHERE id = ${id}`
+    Remove(table, id) {
+        const query = `DELETE FROM ${this.GetTableName(table)} WHERE id = ${id}`
 
         this.db.query(query, (err, res) => {
             if (err) throw err, res
@@ -80,33 +150,49 @@ class Database {
     }
 
     // returns a dictionary with the data condensed
-    GetUserData() {
-        // Full name, CPF, street info, desktop or notebook, accessories ...
+    GetClientInfo() {
+        // Full name, CPF, street info, personal info ...
 
         // TODO: it may need to be updated ( add more info )
         const name = prompt('Name ? ')
         const cpf = prompt('CPF ? ')
         const streetName = prompt('Street name ? ')
-        const neighborhoodName = prompt('Neighborhood name ? ')
         const houseNumber = prompt('Number of your house ? ')
-        const computerType = prompt('Is it a desktop or a notebook ? ')
-        // COMPUTER PROBLEM -> is missing, add it later ...
-        const accessories = prompt('Which accessories does it has ? ')
-
-        console.log(name, cpf, streetName, houseNumber, neighborhoodName, computerType, accessories)
+        const neighborhoodName = prompt('Neighborhood name ? ')
 
         // Passes all the info to a dictionary
         const values = {
             'name': name,
             'cpf': cpf,
             'streetName': streetName,
-            'neighborhoodName': neighborhoodName,
             'houseNumber': houseNumber,
+            'neighborhoodName': neighborhoodName,
+        }
+
+        return values
+    }
+
+    GetOrderInfo() {
+        // ClientID, computerProblem, desktop or notebook, accessories ...
+
+        // TODO: it may need to be updated ( add more info )
+        const clientID = prompt('Client ID ? ')
+        const computerType = prompt('Desktop or Notebook ? ')
+        const computerProblem = prompt('What is the computer problem ? ')
+        const accessories = prompt('Which accessories does it has ? ')
+
+        const values = {
+            'clientID': clientID,
+            'computerProblem': computerProblem,
             'computerType': computerType,
             'accessories': accessories
         }
 
         return values
+    }
+
+    GetTableName(table) {
+        return table == 0 ? 'clients' : 'orders'
     }
 }
 
