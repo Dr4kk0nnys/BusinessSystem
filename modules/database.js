@@ -17,6 +17,10 @@ class Database {
             password: '',
             database: this.DATABASE_NAME
         })
+
+        this.db.connect((err) => {
+            if (err) throw err
+        })
     }
 
     CreatePrimaryTable() {
@@ -192,7 +196,15 @@ class Database {
     }
 
     GetTableName(table) {
-        return table == 0 ? 'clients' : 'orders'
+        return table === 0 ? 'clients' : 'orders'
+    }
+
+    QuitConnection() {
+        this.db.end((err) => {
+            if (err) throw err
+
+            console.log('End!')
+        })
     }
 }
 

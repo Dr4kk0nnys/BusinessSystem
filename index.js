@@ -1,5 +1,6 @@
 // TODO: make a config.txt, each line is a key component, it will read each line at the start of the program, the first line will be like: 'Tech company' or 'Bread shop'
 
+// PROJECT FAIL: I CANNOT MAKE A WHILE LOOP AND MAKE THIS SHIT PRINT OUT THE QUERY ON THE FUCKING SCREEN ( FUCK THIS I'M GONNA PROGRAM THIS WHOLE SHIT IN PYTHON )
 
 const prompt = require('prompt-sync')({
     sigint: true
@@ -9,6 +10,7 @@ const utils = require('./modules/utils')
 const Database = require('./modules/database')
 
 class System {
+
     constructor() {
 
         // initializing the database
@@ -20,11 +22,11 @@ class System {
         // showing the options to the user ...
         utils.ShowOptions()
 
-        // although this function doesn't handle the user input itself
-        // it makes sure the input is valid
         const userInput = this.GetUserInput()
 
-        this.HandleUserInput(userInput)
+        const response = this.HandleUserInput(userInput)
+        // this.database.ReadByName(userInput)
+
     }
 
     // Only get the user input, it doesn't handle it
@@ -169,15 +171,15 @@ class System {
             case '7':
                 const option = prompt('ID or Name or CPF ? ')
 
-                if (option === 'ID') {
+                if (option == 'ID') {
                     const ID = prompt('Client ID ? ')
 
                     this.database.ReadByID(0, ID)
-                } else if (option === 'Name') {
+                } else if (option == 'Name') {
                     const name = prompt('Client name ? ')
 
                     this.database.ReadByName(name)
-                } else if (option === 'CPF') {
+                } else if (option == 'CPF') {
                     const cpf = prompt('Client CPF ? ')
 
                     this.database.ReadByCPF(cpf)
@@ -199,6 +201,9 @@ class System {
 
                     this.database.ReadByClientID(client)
                 }
+
+                break
+
             case '9':
                 return false
         }
